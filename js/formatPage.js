@@ -12,54 +12,64 @@ function makeDiv (divClassName) {
 
 };
 
-// Makes a button element with given text content
-function makeButton(buttonTextContent) {
+// Makes a li element with given text content
+function makeLink(buttonTextContent) {
 
-  const newButton = document.createElement("button");
-  newButton.textContent = String(buttonTextContent);
-  return newButton;
+  // Creates li element
+  const linkLi = document.createElement("li");
+
+  // Makes an anchor tag with an href attribute and a textContent with button #
+  const liAnchor = document.createElement("a");
+  liAnchor.textContent = String(buttonTextContent);
+  addAttribute(liAnchor, "href", "#");
+
+  // Adds attribute to li
+  linkLi.appendChild(liAnchor);
+
+  return linkLi;
 
 };
 
 // Makes the search bar
 function makeSearchBar () {
 
-  const searchBar = document.createElement("form");
+  const searchBar = document.createElement("div");
+  searchBar.className = "student-search";
   searchBar.appendChild(makeInput());
   return searchBar;
 
 }
 
 // Makes pagination buttons
-function makePaginationButtons(numStudents) {
+function makePaginationLinks(numStudents) {
 
-  const listOfButtons = [];
+  const listOfLinks = [];
 
   // Determines number of buttons based on the number of students to be shown
   const numButtons = Math.ceil(numStudents / 10);
 
-  // Makes numButtons number of buttons and appens them to listOfButtons
+  // Makes numLinks number of links and appens them to listOfLinks
   for (let index = 0; index < numButtons; index += 1) {
-    const currButton = makeButton(index+1);
-    listOfButtons.push(currButton);
+    const currLink = makeLink(index+1);
+    listOfLinks.push(currLink);
   }
 
-  return listOfButtons;
+  return listOfLinks;
 
 };
 
-// Makes a div for the buttons
+// Makes a div for the links
 function makeButtonsDiv () {
 
   const pageDiv = document.querySelector(".page");
 
-  // Makes a buttonDiv to return and append to the pageDiv
-  const buttonsDiv = makeDiv("button-list");
+  // Makes a linksDiv to return and append to the pageDiv
+  const linksDiv = makeDiv("pagination");
 
-  // Appends a div with class button-list to the pageDiv
-  pageDiv.appendChild(buttonsDiv);
+  // Appends a linksDiv with class pagination to the pageDiv
+  pageDiv.appendChild(linksDiv);
 
-  return buttonsDiv;
+  return linksDiv;
 
 };
 
@@ -105,6 +115,6 @@ function makeH1 (h1TextContent) {
 // Initializes important data that is accessed by the script.js file
 const studentListUl = document.querySelector(".student-list");
 const formattedLiElements = document.querySelector(".student-list").children;
-const paginationButtons = makePaginationButtons(formattedLiElements.length);
+const paginationLinks = makePaginationLinks(formattedLiElements.length);
 const buttonsDiv = makeButtonsDiv();
 const searchBar = makeSearchBar();

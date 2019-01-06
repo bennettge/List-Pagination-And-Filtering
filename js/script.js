@@ -73,46 +73,39 @@ function displayIfNoLinks() {
 
 
 // Places button elements into the buttonsDiv div
-function placeButtons(paginationButtons) {
+function placeButtons() {
 
   // Loops through all pagination buttons and adds them to the buttonsDiv div
-  for (let index = 0; index < paginationButtons.length; index += 1) {
-    buttonsDiv.appendChild(paginationButtons[index]);
-  }
-
-};
-
-// Resets the button colors to the original colors
-function resetButtonColors() {
-
-  // Loops through the pagination buttons and changes their colors and background
-  for (let index = 0; index < paginationButtons.length; index += 1) {
-    paginationButtons[index].style.backgroundColor = "lightblue";
-    paginationButtons[index].style.color = "white";
+  for (let index = 0; index < paginationLinks.length; index += 1) {
+    buttonsDiv.appendChild(paginationLinks[index]);
   }
 
 };
 
 // Actions for when a button is clicked
-function onButtonClick(buttonClicked) {
+function onLinkClick(linkClicked) {
 
   // Determines the number of the clicked button
-  const buttonNumber = String(buttonClicked.textContent);
+  const linkNumber = String(linkClicked.textContent);
 
-  // Makes the selected button a certain color and everything else default colors
-  resetButtonColors();
-  changeClickedButtonColor(buttonClicked);
+  // Removes any class names from the anchor tags
+  resetLinkClassNames();
+
+  // Adds an active class to the selected button
+  linkClicked.className = "active";
 
   // Remakes the links based on button number clicked
-  placePaginatedLinks(buttonNumber);
+  placePaginatedLinks(linkNumber);
 
 };
 
-// Changes color of clicked button
-function changeClickedButtonColor (buttonClicked) {
+// Resets the button class names to make sure correct tag is selected
+function resetLinkClassNames() {
 
-  buttonClicked.style.backgroundColor = "white";
-  buttonClicked.style.color = "lightblue";
+  for (let index = 0; index < paginationLinks.length; index += 1) {
+    const currTag = paginationLinks[index].firstElementChild;
+    currTag.removeAttribute("class");
+  }
 
 }
 
@@ -157,8 +150,8 @@ function soFarMatches(currentInput, studentName) {
 buttonsDiv.addEventListener("click", (event) => {
 
   // Checks to make sure it was a button clicked
-  if (event.target.tagName === "BUTTON") {
-    onButtonClick(event.target);
+  if (event.target.tagName === "A") {
+    onLinkClick(event.target);
   }
 
 });
@@ -173,7 +166,7 @@ function onKeyPressed () {
   const nameMatches = findNameMatches(currInput);
 
   // Hides extra buttons
-  hideButtons(nameMatches.length);
+  hideLinks(nameMatches.length);
 
   // Sets the linksToDisplay to the matches for output
   linksToDisplay = nameMatches;
@@ -211,19 +204,19 @@ function findNameMatches (currInput) {
 }
 
 // Hides search buttons that aren't needed
-function hideButtons (numCurrMatches) {
+function hideLinks (numCurrMatches) {
 
   // Loops through all of the pagination buttons and hides them if not needed
-  for (let index = 0; index < paginationButtons.length; index += 1) {
+  for (let index = 0; index < paginationLinks.length; index += 1) {
 
     // Makes it so a button is displayed for every page of 10 people
     if (index*10 < numCurrMatches) {
-      paginationButtons[index].style.display = "";
+      paginationLinks[index].style.display = "";
     }
 
     // Hides unneeded buttons
     else {
-      paginationButtons[index].style.display = "none";
+      paginationLinks[index].style.display = "none";
     }
   }
 
@@ -234,6 +227,5 @@ let linksToDisplay = formattedLiElements;
 
 // Calls functions that set up the first view of the page
 placePaginatedLinks(1, linksToDisplay);
-resetButtonColors();
-placeButtons(paginationButtons);
+placeButtons();
 displaySearchBar();

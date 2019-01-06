@@ -4,32 +4,12 @@ body{
   color: #222;
 }
 
-button{
-  background-color: "lightblue";
-  color: "white";
-  width: 30px;
-  height: 20px;
-  margin-top: 25px;
-  margin-right: 10px;
-  font-family: Helvetica, sans-serif;
-  border-radius: 20%;
-}
-
 .page{
   margin: 50px auto;
   width: 70%;
   background-color: #fff;
   border-radius: 5px;
   padding: 50px;
-}
-input {
-  margin-left: 710px;
-  background-color: #e1f1f6;
-  color: #7a7a7a;
-  font-weight: bold;
-  font-family: Helvetica, sans-serif;
-  width: 120px;
-  height: 20px;
 }
 
 .page-header{

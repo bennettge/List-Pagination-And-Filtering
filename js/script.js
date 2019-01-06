@@ -4,48 +4,52 @@ FSJS project 2 - List Filter and Pagination
 ******************************************/
 
 /*
-FILE DESCRIPTION: This file holds all interactivity. It accesses the information
-and formatted HTML in formatPage.js to accomplish this
+FILE DESCRIPTION: This file holds all interactivity and adding HTML to the
+index.html file. It accesses the information and formatted HTML in
+the formatPage.js file to accomplish this
 */
 
-// Removes all of the li elements in the ul with class "student-list"
-function removeCurrentLinks() {
-
-  // Determines the li elements to remove
-  const linksToRemove = studentListUl.children;
-
-  // Determines number of elements to remove
-  const numChildrenToRemove = linksToRemove.length;
-
-  // Loops through all elements in linksToRemove and removes the from the ul
-  for (let index = 0; index < numChildrenToRemove; index += 1) {
-    const currStudent = linksToRemove[index];
-    currStudent.style.display = "none";
-  }
-
-};
-
-// Places li elements in the ul with class "student-list"
+// Shows and hides links based on if selected or not
 function placePaginatedLinks(pageNumber) {
 
-  // Determines the index to start from in the formattedLiElements array
+  // Determines the index to start from in the links
   const startIndex = (pageNumber-1)*10;
 
-  // Determines the number of li elements based on page length
-  let numButtons = 10;
-  if (startIndex+10 >= linksToDisplay.length) {
-    numButtons = linksToDisplay.length % 10;
-  }
+  // Determines the number of links based on page length
+  const numLinks = findNumLinks(startIndex);
 
   // Determines if there are no matching links
   displayIfNoLinks();
 
-  // Loops though a slice of formattedLiElements and adds them to studentListUl
-  for (let index = startIndex; index < startIndex + numButtons; index += 1) {
-    linksToDisplay[index].style.display = "";
-  }
+  // Loops though all links and hides unneeded ones
+  displayLinks(startIndex, numLinks);
 
 };
+
+// Finds the number of links to be displayed
+function findNumLinks (startIndex) {
+
+  let numLinks = 10;
+  if (startIndex+10 >= linksToDisplay.length) {
+    numLinks = linksToDisplay.length % 10;
+  }
+
+  return numLinks;
+
+}
+
+// Displays all wanted links and hides all unwanted links
+function displayLinks (startIndex, numLinks) {
+
+  for (let index = 0; index < linksToDisplay.length; index += 1) {
+    if ((index >= startIndex) && (index < startIndex + numLinks)) {
+      linksToDisplay[index].style.display = "";
+    } else {
+      linksToDisplay[index].style.display = "none";
+    }
+  }
+
+}
 
 // Displays if there aren't any valid search results
 function displayIfNoLinks() {
@@ -60,8 +64,7 @@ function displayIfNoLinks() {
 
   // If there are 0 links that match the search, then a message is outputted
   if (linksToDisplay.length === 0) {
-    const noTextMessage = document.createElement("h1");
-    noTextMessage.textContent = "No Search Matches!";
+    const noTextMessage = makeH1("No matches found!");
 
     // Makes h1 tag for output
     page.appendChild(noTextMessage);
@@ -98,29 +101,27 @@ function onButtonClick(buttonClicked) {
 
   // Makes the selected button a certain color and everything else default colors
   resetButtonColors();
+  changeClickedButtonColor(buttonClicked);
+
+  // Remakes the links based on button number clicked
+  placePaginatedLinks(buttonNumber);
+
+};
+
+// Changes color of clicked button
+function changeClickedButtonColor (buttonClicked) {
+
   buttonClicked.style.backgroundColor = "white";
   buttonClicked.style.color = "lightblue";
 
-  // Remakes the li elements based on button number clicked
-  replaceLinks(buttonNumber);
-
-};
-
-// Remakes the li elements for the ul with class student-list
-function replaceLinks (buttonNumber) {
-
-  // Removes li elements currently in the ul
-  removeCurrentLinks();
-
-  // Adds the desired li elements to the ul
-  placePaginatedLinks(buttonNumber, linksToDisplay);
-
-};
+}
 
 // Puts a search bar in the page header div
 function displaySearchBar() {
+
   const pageHeader = document.getElementsByClassName("page-header cf")[0];
   pageHeader.appendChild(searchBar);
+
 };
 
 // Checks if a the current input in the form currently matches a student's name
@@ -168,7 +169,7 @@ function onKeyPressed () {
   // Gets the current text in the space bar
   const currInput = searchBar.firstElementChild.value;
 
-  // Gets all matching li elements
+  // Gets all matching links
   const nameMatches = findNameMatches(currInput);
 
   // Hides extra buttons
@@ -178,7 +179,8 @@ function onKeyPressed () {
   linksToDisplay = nameMatches;
 
   // Shows first page of output
-  replaceLinks(1);
+  placePaginatedLinks(1, linksToDisplay);
+
 }
 
 // Finds all links that have an h3 text that matches the text in the search bar
@@ -186,7 +188,7 @@ function findNameMatches (currInput) {
 
   const nameMatches = []
 
-  // Loops though formattedLiElements (All of the list elements)
+  // Loops though all links and sets ones that don't match to not display
   for (let index = 0; index < formattedLiElements.length; index += 1) {
 
     // Gets the text content of the list element to check
@@ -198,7 +200,7 @@ function findNameMatches (currInput) {
       formattedLiElements[index].style.display = "";
     }
 
-    // If it doesn't it hides the element
+    // If it doesn't it hides the link
     else {
       formattedLiElements[index].style.display = "none";
     }
@@ -213,9 +215,14 @@ function hideButtons (numCurrMatches) {
 
   // Loops through all of the pagination buttons and hides them if not needed
   for (let index = 0; index < paginationButtons.length; index += 1) {
+
+    // Makes it so a button is displayed for every page of 10 people
     if (index*10 < numCurrMatches) {
       paginationButtons[index].style.display = "";
-    } else {
+    }
+
+    // Hides unneeded buttons
+    else {
       paginationButtons[index].style.display = "none";
     }
   }
@@ -226,7 +233,7 @@ function hideButtons (numCurrMatches) {
 let linksToDisplay = formattedLiElements;
 
 // Calls functions that set up the first view of the page
-replaceLinks(1);
+placePaginatedLinks(1, linksToDisplay);
 resetButtonColors();
 placeButtons(paginationButtons);
 displaySearchBar();

@@ -1,6 +1,6 @@
 /*
 FILE DESCRIPTION: This file holds all information/formatted HTML to be accessed
-by the script.js file (which adds interactivity)
+by the script.js file. It is responsible for making all elements for the display.
 */
 
 // Makes a div element with given class name
@@ -90,6 +90,15 @@ function makeInput() {
   addAttribute(input, "onkeyup", "onKeyPressed()");
 
   return input;
+
+}
+
+// Makes an h1 tage with given text content
+function makeH1 (h1TextContent) {
+
+  const h1 = document.createElement("h1");
+  h1.textContent = h1TextContent;
+  return h1;
 
 }
 

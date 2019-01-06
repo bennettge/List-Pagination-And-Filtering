@@ -22,6 +22,15 @@ button{
   border-radius: 5px;
   padding: 50px;
 }
+input {
+  margin-left: 710px;
+  background-color: #e1f1f6;
+  color: #7a7a7a;
+  font-weight: bold;
+  font-family: Helvetica, sans-serif;
+  width: 120px;
+  height: 20px;
+}
 
 .page-header{
   margin-bottom: 20px;
